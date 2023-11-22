@@ -1,0 +1,5 @@
+USD;United States Dollar
+EUR;Euro
+GBP;Great British Pound
+JPY;Japanese Yen
+CAD;Canadian Dollar
