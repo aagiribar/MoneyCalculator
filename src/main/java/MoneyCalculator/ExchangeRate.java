@@ -1,13 +1,6 @@
 package MoneyCalculator;
 
-public class ExchangeRate {
-    private final Money money;
-    private final Currency from;
-    private final Currency to;
+import java.time.LocalDate;
 
-    public ExchangeRate(Money money, Currency to) {
-        this.money = money;
-        this.from = money.currency();
-        this.to = to;
-    }
+public record ExchangeRate(Currency from, Currency to, double rate, LocalDate date) {
 }
