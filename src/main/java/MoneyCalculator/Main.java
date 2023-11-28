@@ -17,6 +17,7 @@ public class Main {
         Currency dollar = currencies.get(150);
         ExchangeRateLoader exchangeRateLoader = new FixerIOExchangeRateLoader(new FixerIOURLBuilder());
         ExchangeRate exchangeRate = exchangeRateLoader.load(euro, dollar);
-        System.out.println(exchangeRate);
+        ExchangeRateWriter erWriter = new FileExchangeRateWriter("rates.csv");
+        erWriter.write(exchangeRate);
     }
 }
