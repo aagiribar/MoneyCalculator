@@ -1,5 +1,7 @@
 package MoneyCalculator;
 
+import MoneyCalculator.FixerIO.UnsucessfulFixerIOResponseException;
+
 public class ExchangeMoneyCommand implements Command{
     private final CurrencyDialog currencyDialog;
     private final MoneyDialog moneyDialog;
@@ -18,12 +20,14 @@ public class ExchangeMoneyCommand implements Command{
     }
 
     @Override
-    public void execute() {
+    public void execute() throws UnsucessfulFixerIOResponseException {
         Currency to = currencyDialog.get();
         Money money = moneyDialog.get();
         boolean writeFile = writeExchangeRateDialog.get();
 
-        ExchangeRate exchangeRate = exchangeRateLoader.load(money.currency(), to);
+        ExchangeRate exchangeRate = null;
+        exchangeRate = exchangeRateLoader.load(money.currency(), to);
+
         Money result = new Money(calculateDestinationAmount(money.amount(), exchangeRate.rate()), to);
 
         if(writeFile) exchangeRateWriter.write(exchangeRate);

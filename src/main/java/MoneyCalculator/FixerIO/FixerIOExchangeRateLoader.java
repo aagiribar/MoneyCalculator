@@ -21,12 +21,17 @@ public class FixerIOExchangeRateLoader implements ExchangeRateLoader {
     }
 
     @Override
-    public ExchangeRate load(Currency from, Currency to) {
+    public ExchangeRate load(Currency from, Currency to) throws UnsucessfulFixerIOResponseException {
         String contents = loadJSONContentsfromURL(from.code(), to.code());
         JsonObject jsonObject = getJsonObjectFrom(contents);
+        if (!checkResponse(jsonObject)) throw new UnsucessfulFixerIOResponseException(jsonObject);
         double rate = getRateFrom(jsonObject, to.code());
         LocalDate date = getDateFrom(jsonObject);
         return new ExchangeRate(from, to, rate, date);
+    }
+
+    private boolean checkResponse(JsonObject jsonObject) {
+        return jsonObject.getAsJsonPrimitive("success").getAsBoolean();
     }
 
     private LocalDate getDateFrom(JsonObject jsonObject) {

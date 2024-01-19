@@ -3,6 +3,7 @@ package MoneyCalculator;
 import MoneyCalculator.FixerIO.FixerIOCurrencyLoader;
 import MoneyCalculator.FixerIO.FixerIOExchangeRateLoader;
 import MoneyCalculator.FixerIO.FixerIOURLBuilder;
+import MoneyCalculator.FixerIO.UnsucessfulFixerIOResponseException;
 
 import java.util.List;
 
@@ -16,7 +17,12 @@ public class Main {
         Currency euro = currencies.get(46);
         Currency dollar = currencies.get(150);
         ExchangeRateLoader exchangeRateLoader = new FixerIOExchangeRateLoader(new FixerIOURLBuilder());
-        ExchangeRate exchangeRate = exchangeRateLoader.load(euro, dollar);
+        ExchangeRate exchangeRate = null;
+        try {
+            exchangeRate = exchangeRateLoader.load(euro, dollar);
+        } catch (UnsucessfulFixerIOResponseException e) {
+            throw new RuntimeException(e);
+        }
         ExchangeRateWriter erWriter = new FileExchangeRateWriter("rates.csv");
         erWriter.write(exchangeRate);
     }

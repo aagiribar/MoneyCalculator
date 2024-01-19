@@ -1,6 +1,7 @@
 package MoneyCalculator.Mocks;
 
 import MoneyCalculator.*;
+import MoneyCalculator.FixerIO.UnsucessfulFixerIOResponseException;
 
 import java.util.List;
 
@@ -14,6 +15,10 @@ public class MockMain {
         WriteExchangeRateDialog writeExchangeRateDialog = new MockWriteExchangeRateDialog();
         ExchangeRateWriter exchangeRateWriter = new MockExchangeRateWriter();
         Command exchangeMoneyCommand = new ExchangeMoneyCommand(currencyDialog, moneyDialog, moneyDisplay, exchangeRateLoader, writeExchangeRateDialog, exchangeRateWriter);
-        exchangeMoneyCommand.execute();
+        try {
+            exchangeMoneyCommand.execute();
+        } catch (UnsucessfulFixerIOResponseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

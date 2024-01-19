@@ -4,6 +4,7 @@ import MoneyCalculator.*;
 import MoneyCalculator.FixerIO.FixerIOCurrencyLoader;
 import MoneyCalculator.FixerIO.FixerIOExchangeRateLoader;
 import MoneyCalculator.FixerIO.FixerIOURLBuilder;
+import MoneyCalculator.FixerIO.UnsucessfulFixerIOResponseException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,7 +61,16 @@ public class SwingMain extends JFrame {
 
     private Component createCalculateButton() {
         Button button = new Button("Calculate");
-        button.addActionListener(e -> commands.get("Exchange Money").execute());
+        button.addActionListener(e -> {
+            try {
+                commands.get("Exchange Money").execute();
+            } catch (UnsucessfulFixerIOResponseException ex) {
+                JOptionPane.showMessageDialog(SwingMain.this,
+                        "Base currency is not available",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        });
         return button;
     }
 
